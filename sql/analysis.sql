@@ -1,1 +1,7 @@
--- Employee Compensation & Bonus Analysis Queries
+-- =====================================================
+-- Project: Employee Compensation & Bonus Analysis
+-- Database: PostgreSQL
+-- Author: Mykhailo Korobchuk
+-- =====================================================
+
+-- -----------------------------------------------------
