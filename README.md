@@ -1,7 +1,11 @@
 # 📊 Аналіз структури компенсацій та бонусних виплат співробітників
 *(Employee Compensation & Bonus Distribution Analysis)*
 
-Аналітичний SQL-проєкт на базі **PostgreSQL**, присвячений дослідженню зарплатних грейдів, справедливості розподілу преміального фонду та динаміки виплат на вибірці зі **100 співробітників** та **70 бонусних транзакцій**.
+Аналітичний SQL-проєкт з дослідження структури заробітних плат та бонусних виплат співробітників.
+
+Проєкт демонструє використання PostgreSQL, CTE, JOIN, CASE, агрегатних та віконних функцій для аналізу компенсацій, ранжування співробітників і дослідження розподілу бонусного фонду між департаментами.
+
+Dataset: 100 employees + 70 bonus transactions
 
 ---
 
@@ -36,12 +40,26 @@ employee-compensation-bonus-analysis/
 
 **СУБД:** PostgreSQL
 
-* **Навички та конструкції SQL:**
-* **Віконні функції (Window Functions):** DENSE_RANK() (ранжування без пропуску місць при збігах), LAG() (порівняння поточної виплати з попередньою).
-* **Умовна агрегація:** CASE WHEN всередині SUM() для побудови зведеної таблиці (pivot) за типами бонусів.
-* **Об'єднання таблиць:** LEFT JOIN (для виявлення відділів із нульовими бонусами) та INNER JOIN.
-* **Агрегатні функції та робота з NULL:** ROUND(), AVG(), SUM(), MIN(), MAX(), COUNT(DISTINCT), COALESCE().
-* **Табличні вирази (CTE):** для чистоти та читабельності складних запитів.
+**SQL**
+* CTE (Common Table Expressions)
+* INNER JOIN / LEFT JOIN
+* GROUP BY / HAVING
+* CASE WHEN
+* Subqueries
+* Aggregate functions
+* Conditional aggregation
+* NULL handling with COALESCE()
+**Window Functions**
+* DENSE_RANK() — ranking employees within departments
+* LAG() — comparison with previous bonus payment
+**Other functions**
+* AVG()
+* SUM()
+* MIN()
+* MAX()
+* COUNT()
+* COUNT(DISTINCT)
+* ROUND()
 
 ---
 ## 🔍 Key Business Findings (Insights)
