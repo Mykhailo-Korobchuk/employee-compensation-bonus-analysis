@@ -100,3 +100,21 @@ ON e.id = b.employee_id
 GROUP BY e.id, e.first_name, e.last_name, e.department, e.salary
 ORDER BY total_compensation DESC
 LIMIT 10;
+
+-- -----------------------------------------------------
+-- 6. Bonus Payout Growth (Window Function LAG)
+-- Business Goal: Track employee bonus changes over time to see progression.
+-- -----------------------------------------------------
+
+SELECT b.employee_id,
+       e.first_name,
+       e.last_name,
+       e.department,
+       b.bonus_date,
+       b.bonus_amount,
+       LAG(b.bonus_amount) OVER (PARTITION BY b.employee_id ORDER BY b.bonus_date) AS previous_bonus,
+       b.bonus_amount - LAG(b.bonus_amount) OVER (PARTITION BY b.employee_id ORDER BY bonus_date) AS bonus_diff
+FROM employees AS e
+JOIN bonuses As b 
+ON e.id = b.employee_id
+ORDER BY employee_id, bonus_date;
