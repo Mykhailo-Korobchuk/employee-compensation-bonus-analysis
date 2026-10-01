@@ -58,3 +58,25 @@ LEFT JOIN bonuses AS b
 ON e.id = b.employee_id
 GROUP BY e.department
 ORDER BY count_bonus DESC;
+
+-- -----------------------------------------------------
+-- 4. Bonus Structure Breakdown by Department
+-- Business Goal: Analyze bonus allocation by type (Quarterly, Annual, Sales, Project).
+-- -----------------------------------------------------
+
+SELECT e.department,
+       COUNT(b.bonus_id) AS total_bonus_payouts,
+       COALESCE(SUM(b.bonus_amount), 0) AS total_bonus_budget,
+       SUM(CASE WHEN b.bonus_type = 'Квартальний' 
+           THEN b.bonus_amount ELSE 0 END) AS annual_bonuses,
+       SUM(CASE WHEN b.bonus_type = 'Річний' 
+           THEN b.bonus_amount ELSE 0 END) AS yearly_total,
+       SUM(CASE WHEN b.bonus_type = 'Продажі' 
+           THEN b.bonus_amount ELSE 0 END) AS sales_bonus,
+       SUM(CASE WHEN b.bonus_type = 'Проєктний' 
+           THEN b.bonus_amount ELSE 0 END) AS project_bonuses
+FROM employees AS e
+LEFT JOIN bonuses AS b
+ON e.id = b.employee_id
+GROUP BY e.department
+ORDER BY total_bonus_payouts DESC;
