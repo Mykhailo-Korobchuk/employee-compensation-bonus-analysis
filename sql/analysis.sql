@@ -42,3 +42,19 @@ SELECT department,
 FROM ranked_salary
 WHERE rank_salary <= 2
 ORDER BY department, rank_salary;
+
+-- -----------------------------------------------------
+-- 3. Bonus Eligibility & Department Coverage
+-- Business Goal: Identify which departments and employees receive bonuses vs. those with 0 bonuses.
+-- -----------------------------------------------------
+
+SELECT e.department,
+       COUNT(DISTINCT e.id) AS total_employees,
+       COUNT(DISTINCT b.employee_id) AS count_bonus,
+       COALESCE(SUM(b.bonus_amount), 0) AS total_bonus,
+       ROUND(COUNT(DISTINCT b.employee_id) * 100 / COUNT(DISTINCT e.id), 2) AS bonus_coverage_pct
+FROM employees AS e
+LEFT JOIN bonuses AS b
+ON e.id = b.employee_id
+GROUP BY e.department
+ORDER BY count_bonus DESC;
