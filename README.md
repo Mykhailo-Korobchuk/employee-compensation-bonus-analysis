@@ -49,9 +49,11 @@ employee-compensation-bonus-analysis/
 * Aggregate functions
 * Conditional aggregation
 * NULL handling with COALESCE()
+  
 **Window Functions**
 * DENSE_RANK() — ranking employees within departments
 * LAG() — comparison with previous bonus payment
+  
 **Other functions**
 * AVG()
 * SUM()
