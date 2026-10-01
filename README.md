@@ -176,9 +176,9 @@ SELECT e.department,
        COUNT(b.bonus_id) AS total_bonus_payouts,
        COALESCE(SUM(b.bonus_amount), 0) AS total_bonus_budget,
        SUM(CASE WHEN b.bonus_type = 'Квартальний' 
-           THEN b.bonus_amount ELSE 0 END) AS annual_bonuses,
+           THEN b.bonus_amount ELSE 0 END) AS quarterly_bonuses,
        SUM(CASE WHEN b.bonus_type = 'Річний' 
-           THEN b.bonus_amount ELSE 0 END) AS yearly_total,
+           THEN b.bonus_amount ELSE 0 END) AS annual_bonuses,
        SUM(CASE WHEN b.bonus_type = 'Продажі' 
            THEN b.bonus_amount ELSE 0 END) AS sales_bonus,
        SUM(CASE WHEN b.bonus_type = 'Проєктний' 
@@ -191,13 +191,13 @@ ORDER BY total_bonus_payouts DESC;
 ```
 Результат:
 ```
- department | total_bonus_payouts | total_bonus_budget | annual_bonuses | yearly_total | sales_bonus | project_bonuses 
-------------+---------------------+--------------------+----------------+--------------+-------------+-----------------
- IT         |                  34 |             791000 |         497000 |       259000 |           0 |           35000
- Sales      |                  28 |             288600 |              0 |            0 |      288600 |               0
- Finance    |                   8 |             108500 |         108500 |            0 |           0 |               0
- Marketing  |                   0 |                  0 |              0 |            0 |           0 |               0
- HR         |                   0 |                  0 |              0 |            0 |           0 |               0
+ department | total_bonus_payouts | total_bonus_budget | quarterly_bonuses | annual_bonuses | sales_bonus | project_bonuses 
+------------+---------------------+--------------------+-------------------+----------------+-------------+-----------------
+ IT         |                  34 |             791000 |            497000 |         259000 |           0 |           35000
+ Sales      |                  28 |             288600 |                 0 |              0 |      288600 |               0
+ Finance    |                   8 |             108500 |            108500 |              0 |           0 |               0
+ Marketing  |                   0 |                  0 |                 0 |              0 |           0 |               0
+ HR         |                   0 |                  0 |                 0 |              0 |           0 |               0
 (5 rows)
 ```
 **💡Висновок:** Департамент IT акумулює 66.6% (791 тис. із 1,188 млн грн) усього преміального фонду компанії та є єдиним отримувачем річних і проєктних бонусів. Відділ Sales преміюється виключно за моделлю комісійних від продажів, а Finance — лише квартальними преміями.
@@ -332,7 +332,7 @@ ORDER BY employee_id, bonus_date;
           92 | Юліан Задорожний     | Finance    | 2023-12-30 |        14000 |                |           
           94 | Дем'ян Корнійчук     | IT         | 2024-01-10 |        24000 |                |           
           94 | Дем'ян Корнійчук     | IT         | 2024-09-01 |        25000 |          24000 |       1000
-          96 | Арсен Глушк��         | Sales      | 2024-01-15 |        10800 |                |           
+          96 | Арсен Глушкo         | Sales      | 2024-01-15 |        10800 |                |           
           98 | Степан Матвієнко     | IT         | 2024-01-20 |        16000 |                |           
          100 | Остап Якименко       | Sales      | 2024-01-25 |        12500 |                |           
          100 | Остап Якименко       | Sales      | 2024-09-10 |        13500 |          12500 |       1000
