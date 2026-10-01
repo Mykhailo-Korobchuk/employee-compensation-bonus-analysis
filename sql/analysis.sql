@@ -80,3 +80,23 @@ LEFT JOIN bonuses AS b
 ON e.id = b.employee_id
 GROUP BY e.department
 ORDER BY total_bonus_payouts DESC;
+
+-- -----------------------------------------------------
+-- 5. Total Compensation (Salary + Total Bonuses)
+-- Business Goal: Calculate true company cost and total earnings per compensated employee.
+-- -----------------------------------------------------
+
+SELECT 
+    e.id,
+    e.first_name,
+    e.last_name,
+    e.department,
+    e.salary AS base_salary,
+    COALESCE(SUM(b.bonus_amount), 0) AS total_bonus_earned,
+    e.salary + COALESCE(SUM(b.bonus_amount), 0) AS total_compensation
+FROM employees AS e
+LEFT JOIN bonuses As b 
+ON e.id = b.employee_id
+GROUP BY e.id, e.first_name, e.last_name, e.department, e.salary
+ORDER BY total_compensation DESC
+LIMIT 10;
