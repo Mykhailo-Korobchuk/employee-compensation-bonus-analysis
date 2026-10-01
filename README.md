@@ -127,6 +127,7 @@ ORDER BY department, rank_salary;
 
 ### 3. Охоплення департаментів бонусною програмою
 Перевіряємо, яка частка персоналу в кожному підрозділі залучена до преміювання.
+```text
 -- -----------------------------------------------------
 -- 3. Bonus Eligibility & Department Coverage
 -- Business Goal: Identify which departments and employees receive bonuses vs. those with 0 bonuses.
@@ -142,7 +143,9 @@ LEFT JOIN bonuses AS b
 ON e.id = b.employee_id
 GROUP BY e.department
 ORDER BY count_bonus DESC;
+```
 Результат:
+```
  department | total_employees | count_bonus | total_bonus | bonus_coverage_pct 
 ------------+-----------------+-------------+-------------+--------------------
  IT         |              27 |          20 |      791000 |              74.00
@@ -151,10 +154,12 @@ ORDER BY count_bonus DESC;
  HR         |              16 |           0 |           0 |               0.00
  Marketing  |              18 |           0 |           0 |               0.00
 (5 rows)
+```
 Ключовий інсайт: Виявлено критичний дисбаланс у системі мотивації. Тоді як у Sales (80%) та IT (74%) більшість команди отримує премії, департаменти Marketing та HR мають 0% охоплення бонусами, що створює високий ризик плинності кадрів у цих відділах.
 
 ### 4. Розподіл бонусного бюджету за типами виплат
 Аналізуємо цільове призначення премій у розрізі департаментів за допомогою умовної агрегації CASE WHEN.
+```text
 -- -----------------------------------------------------
 -- 4. Bonus Structure Breakdown by Department
 -- Business Goal: Analyze bonus allocation by type (Quarterly, Annual, Sales, Project).
@@ -176,7 +181,9 @@ LEFT JOIN bonuses AS b
 ON e.id = b.employee_id
 GROUP BY e.department
 ORDER BY total_bonus_payouts DESC;
+```
 Результат:
+```
  department | total_bonus_payouts | total_bonus_budget | annual_bonuses | yearly_total | sales_bonus | project_bonuses 
 ------------+---------------------+--------------------+----------------+--------------+-------------+-----------------
  IT         |                  34 |             791000 |         497000 |       259000 |           0 |           35000
@@ -185,10 +192,12 @@ ORDER BY total_bonus_payouts DESC;
  Marketing  |                   0 |                  0 |              0 |            0 |           0 |               0
  HR         |                   0 |                  0 |              0 |            0 |           0 |               0
 (5 rows)
+```
 Висновок: Департамент IT акумулює 66.6% (791 тис. із 1,188 млн грн) усього преміального фонду компанії та є єдиним отримувачем річних і проєктних бонусів. Відділ Sales преміюється виключно за моделлю комісійних від продажів, а Finance — лише квартальними преміями.
 
 ### 5. Топ-10 працівників за сукупною компенсацією
 Визначаємо реальні витрати компанії на топових спеціалістів.
+```text
 -- -----------------------------------------------------
 -- 5. Total Compensation (Salary + Total Bonuses)
 -- Business Goal: Calculate true company cost and total earnings per compensated employee.
@@ -208,7 +217,9 @@ ON e.id = b.employee_id
 GROUP BY e.id, e.first_name, e.last_name, e.department, e.salary
 ORDER BY total_compensation DESC
 LIMIT 10;
+```
 Результат:
+```
  id | first_name | last_name  | department | base_salary | total_bonus_earned | total_compensation 
 ----+------------+------------+------------+-------------+--------------------+--------------------
  15 | Максим     | Кравчук    | IT         |       90000 |              96000 |             186000
@@ -222,10 +233,12 @@ LIMIT 10;
  64 | Марк       | Приходько  | IT         |       81000 |              43000 |             124000
  23 | Василь     | Козак      | IT         |       78000 |              37000 |             115000
 (10 rows)
+```
 Висновок: Усі 10 найбільш високооплачуваних працівників компанії працюють в IT. При цьому лідер за базовою ставкою (Костянтин Степаненко, 94 000 грн) поступився першим місцем за загальним доходом Максиму Кравчуку (186 000 грн), у якого сума бонусів (96 000 грн) перевищила базовий оклад завдяки поєднанню річної, квартальної та проєктної премій.
 
 ### 6. Динаміка бонусних виплат у часі
 Відстежуємо зміну розміру премії кожного співробітника порівняно з його попередньою виплатою.
+```text
 -- -----------------------------------------------------
 -- 6. Bonus Payout Growth (Window Function LAG)
 -- Business Goal: Track employee bonus changes over time to see progression.
@@ -243,7 +256,9 @@ FROM employees AS e
 JOIN bonuses As b 
 ON e.id = b.employee_id
 ORDER BY employee_id, bonus_date;
+```
 Результат:
+```
 employee_id | first_name | last_name  | department | bonus_date | bonus_amount | previous_bonus | bonus_diff 
 -------------+------------+------------+------------+------------+--------------+----------------+------------
            1 | Олександр  | Коваль     | IT         | 2023-01-15 |        15000 |                |           
@@ -317,6 +332,7 @@ employee_id | first_name | last_name  | department | bonus_date | bonus_amount |
          100 | Остап      | Якименко   | Sales      | 2024-01-25 |        12500 |                |           
          100 | Остап      | Якименко   | Sales      | 2024-09-10 |        13500 |          12500 |       1000
 (70 rows)
+```
 Висновок: У всіх співробітників, які отримували бонуси повторно у 2024 році, спостерігається виключно позитивна динаміка (bonus_diff > 0): приріст виплат становить від +500 до +4 000 грн, що вказує на регулярну індексацію преміальних виплат.
 
 
